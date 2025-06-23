@@ -1,0 +1,67 @@
+@charset "utf-8";
+
+/* ─── 슬라이드 래퍼 ───────────────────────────────────────────── */
+.slide_wrap {
+  width: 100%;
+  margin: 5px auto 0;
+  position: relative;
+}
+
+/* 각 슬라이드 자체를 위치 기준점으로 */
+.swiper_slide {
+  position: relative;
+}
+
+/* 이미지 스타일 */
+.slide_image {
+  width: 100%;
+  display: block;
+}
+
+/* 캡션 레이어 */
+.slide_caption {
+  position: absolute;
+  top: 50%;                        /* 슬라이드 세로 중앙 */
+  left: 50%;                       /* 슬라이드 가로 중앙 */
+  transform: translate(-50%, -50%);
+  color: #fff;                     /* 흰색 텍스트 */
+  text-align: center;
+  white-space: pre-line;           /* \n 줄바꿈 처리 */
+  font-size: 2rem;
+  line-height: 1.4;
+  padding: 0 1rem;                 /* 좌우 여백 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  pointer-events: none;            /* 캡션 위 클릭은 이미지로 전달 */
+  z-index: 5;                      /* 화살표보다 아래, 이미지보다 위 */
+}
+
+/* ─── 네비게이션 버튼 ───────────────────────────────────────── */
+.swiper-button-prev,
+.swiper-rtl .swiper-button-next {
+  left: var(--swiper-navigation-sides-offset, 10px);
+  right: auto;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: var(--swiper-navigation-top-offset, 50%);
+  width: calc(var(--swiper-navigation-size) / 2 * 30);
+  height: var(--swiper-navigation-size);
+  margin-top: calc(0px - (var(--swiper-navigation-size) / 2));
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff !important;
+}
+
+/* ─── 페이지네이션 불릿 ───────────────────────────────────── */
+.swiper-pagination-bullet {
+  display: none !important;
+  background: rgba(0, 0, 0, 0.3);
+}
+.swiper-pagination-bullet-active {
+  background: #000;
+}

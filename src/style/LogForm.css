@@ -1,0 +1,238 @@
+@charset "UTF-8";
+
+/* 로그인, 회원가입 폼 */
+.logform {
+  width: 610px;
+  margin: 0 auto;
+}
+
+/* 제목 */
+.logform legend {
+  font-weight: bold;
+  text-align: center;
+  margin: 25px auto;
+  font-size: var(--xl_font); /* 24px */
+  padding: 45px 0 5px 0;
+}
+
+/* label 숨기기 */
+.logform .display_none {
+  display: none;
+}
+
+/* 내용 입력 */
+.logform p, .logform_social {
+  margin: 35px 0;
+}
+
+.logform input {
+  width: 100%;
+  border: none;
+  padding: 10px 6px;
+}
+
+.logform #logform_userid, .logform #logform_password,
+.logform #logform_username, .logform #logform_password_conf, .logform #logform_phone, .logform #logform_email, 
+.logform #logform_init_region, .logform #logform_town, .logform #logform_locate {
+  border-bottom: 3px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 8px;
+  transition: 0.15s;
+}
+.logform input:focus, .logform select:focus {
+  outline: none;
+}
+.logform input:focus {
+  background: #efefef;
+  border: 1px solid #ccc;
+}
+
+/* 버튼 공통서식 */
+.logform input[type=submit],
+.logform_social a,
+.logform .logform_cancel {
+  border-radius: 15px;
+}
+/* 로그인 버튼 */
+.logform input[type=submit] {
+  background: var(--m_color_g); /* #156615 */
+  color: var(--m_color_wh); /* #fff */
+  cursor: pointer;
+}
+.logform input[type=submit]:hover {
+  background: #197e19;
+}
+
+/* 찾기, 회원가입 구간 */
+.logform_findjoin {
+  text-align: center;
+}
+
+.logform_findjoin a {
+  padding: 0 25px;
+}
+.logform_findjoin span::after {
+  border-top: 1px solid var(--s_color_bk); /* #333 */
+  display: inline-block;
+  content: '';
+  transform: rotate(90deg);
+  width: 20px;
+  align-items: center;
+  height: 8px;
+}
+.logform_findjoin span:last-child::after {
+  border: none;
+}
+.logform_findjoin a:hover {
+  color: var(--m_color_g);
+  font-weight: 600;
+}
+
+/* 소셜 로그인 */
+.logform_social a {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 16px 0;
+}
+.logform_social img {
+  width: auto;
+  max-height: 44px;
+}
+
+.kakao_login {
+  background: #FEE500;
+}
+.naver_login {
+  background: #03C75A;
+}
+.logform_social a:hover {
+  opacity: 0.8;
+}
+
+/* 실패 메시지 */
+.logform .logform_error {
+  color: rgb(172, 8, 8);
+}
+
+/* 회원가입 페이지 추가 내용 */
+/* 필수 입력사항 표시 */
+.logform .logform_info {
+  text-align: right;
+  margin: 0;
+  font-size: var(--s_font); /* 14px */
+  color: rgb(172, 8, 8);
+}
+
+.logform label {
+  display: block;
+  width: 100%;
+  font-weight: 600;
+}
+.logform select:focus {
+  border: 1px solid var(--s_color_bk);
+}
+
+.logform #logform_region, .logform #logform_city {
+  margin-top: 8px;
+  width: 100%;
+  padding: 5px 7px;
+}
+
+/* 중요표시 */
+.logform p > label > span {
+  font-size: var(--s_font); /* 14px */
+  color: rgb(172, 8, 8);
+}
+
+/* 이용약관 동의 */
+.logform_chbox_wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logform_chbox_wrap p {
+  margin: 0; /* p태그 공통 마진값 초기화 */
+}
+.logform_chbox_wrap p, .logform_chbox_wrap span {
+  margin-bottom: 15px;
+}
+.logform_chbox_wrap input[type=checkbox] {
+  width: inherit;
+  margin-right: 8px;
+} /* 체크박스 */
+.logform_chbox_wrap label {
+  display: inline;
+}
+.logform_chbox_wrap span {
+  cursor: pointer;
+}
+
+#logform_agreetxt {
+  width: 100%;
+  resize: none;
+  box-sizing: border-box;
+  padding: 4px 5px;
+  font-size: var(--sm_font); /* 15px */
+  height: '220px';
+}
+#logform_agreetxt:focus {
+  outline: none;
+}
+
+/* 회원정보 수정 */
+/* 지역 수정 - 수정 전 입력된 지역 */
+.logform .logform_initial_region {
+  margin: 0;
+}
+.logform .logform_initial_region + p { /* 다음 형제 요소만 선택 */
+  margin-top: 15px;
+}
+
+/* 지역 수정 */
+.logform #logform_town, .logform #logform_locate, .logform #logform_init_region {
+  border-bottom: none;
+  border: 1px solid #ccc;
+}
+.logform #logform_init_region {
+  background: #ccc;
+}
+
+/* 수정하기 버튼 */
+.logform .logform_update {
+  margin-bottom: 16px; /* 소셜 로그인 동일 */
+}
+.logform .logform_cancel {
+  text-align: center;
+  background: #e4e4e4;
+  margin-top: 0;
+}
+/* 취소 버튼 */
+.logform .logform_cancel button {
+  padding: 10px 6px; /* 수정버튼과 동일 크기 */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+.logform .logform_cancel:hover {
+  background: #cecece;
+}
+
+/* 반응형 */
+/* tablet (max-width: 1024px , min-width: 768px */
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .logform {
+    max-width: 610px; /* pc에서 설정한 너비값 */
+    width: 100%;
+  }
+}
+
+/* mobile (max-width: 767px) */
+@media screen and (max-width: 767px) {
+  .logform {
+    max-width: 610px; /* pc에서 설정한 너비값 */
+    width: 96%;
+    padding: 0 2%;
+  }
+}

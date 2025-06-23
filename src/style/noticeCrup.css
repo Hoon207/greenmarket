@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+.notice_crup_section {
+  width: 600px;
+  margin: 30px auto;
+}
+.notice_crup_section h2 {
+  text-align: center;
+  font-size: var(--l_font); /* 20px */
+  font-weight: 600;
+}
+
+.notice_crup_form {
+  margin: 10px 0;
+}
+
+.notice_crup_form legend {
+  text-align: right;
+  font-size: var(--xs_font); /* 13px */
+}
+
+.notice_crup_form p {
+  margin: 15px 0;
+}
+.notice_crup_form label {
+  display: block;
+  padding: 8px 0;
+}
+.notice_crup_form input, .notice_crup_form select, .notice_crup_form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 7px;
+  border: 1px solid #aaa;
+}
+
+.notice_crup_form input:focus {
+  outline: none;
+  border: 1px solid #ccc;
+  background: #efefef;
+}
+
+.notice_crup_form #notice_writ {
+  background: #cdcdcd;
+}
+
+.notice_crup_form textarea {
+  resize: vertical;
+}
+
+.notice_crup_form input[type=file] {
+  border: 1px solid #ccc;
+  height: auto;
+}
+
+.notice_crup_form .notice_crup_submit_btn {
+  margin-top: 30px;
+}
+.notice_crup_submit_btn input {
+  border: none;
+  cursor: pointer;
+  background: var(--m_color_g); /* #156615 */
+  color: var(--m_color_wh); /* #fff */
+  border-radius: 15px;
+  padding: 10px 6px;
+}
+.notice_crup_submit_btn input:hover {
+  background: #197e19;
+}

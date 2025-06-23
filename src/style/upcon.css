@@ -1,0 +1,90 @@
+/* src/style/upcon.css */
+@charset "utf-8";
+
+/* ────────────────────────────────────────────────────────── */
+/* 1) 배너 컨테이너 (이미지 제거, 핑크 배경) */
+.upcon_banner {
+  position: relative;
+  width: 100%;
+  height: 137px;
+  background-color: #ffffff; /* 핑크 배경 색상 */
+  border-bottom: 2px solid #ccc;
+  overflow: hidden;
+}
+
+/* ────────────────────────────────────────────────────────── */
+/* 2) 오버레이(텍스트 부분) */
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;   /* 링크 클릭 방해 X */
+}
+.slider-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+.slider-item { flex: 0 0 auto; margin: 0 40px; }
+
+/* 텍스트 크기 */
+.banner-title { margin: 0; font-size: 40px; font-weight: 700; color: #1fa5ff; line-height: 1.2; }
+.banner-date  { margin: 4px 0 0; font-size: 20px; color: #1fa5ff; }
+
+/* 애니메이션 */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ────────────────────────────────────────────────────────── */
+/* 3) 메뉴 박스 기존 스타일 유지 */
+.upcon_menubox { width: 1200px; margin: 100px auto; }
+.upcon_menubox ul { display: flex; justify-content: space-evenly; }
+.upcon_menubox ul li p { text-align: center; margin-top: 10px; }
+
+/* 메뉴 이미지 호버 그림자 */
+.upcon_menuimg {
+  position: relative;       /* ① 기준 컨테이너에 position:relative 지정 */
+  display: inline-block;    /* content 크기에 맞춰 감싸도록 */
+  width: 90%;               /* img와 동일한 너비를 주려면 이렇게 */
+}
+
+.upcon_menuimg img {
+  display: block;
+  width: 100%;
+  border-radius: 36px;
+  transition: 0.3s;
+}
+
+.upcon_menuimg img:hover {
+  box-shadow: 0 0 20px rgba(0, 128, 0, 0.6);
+}
+
+.upcon_menuimg p {
+  position: absolute;       /* ② 절대위치 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  z-index: 1;               /* 이미지 위로 올라오도록 */
+  color: #fff;              /* 필요에 따라 글자색 설정 */
+  pointer-events: none;     /* 이미지 호버 효과 유지(선택사항) */
+  font-size: 30px;
+}
+
+/* 블러된 녹색 원 */
+.upcon_menuimg p::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;           /* 원 지름: 필요에 따라 조절 */
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 128, 0, 0.6);     /*녹색 + 투명도*/
+  filter: blur(20px);                   /* 가장자리 블러 강도 */
+  z-index: -1;                          /* 텍스트 뒤로 */
+}

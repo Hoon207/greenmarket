@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+/* 메인 목록 (외부) */
+.main_list_section {
+  width: 1200px;
+  margin: 0 auto; /* 이전 상하 75px 적용 */
+  position: relative;
+}
+.main_list_section > h2 {
+  font-weight: 600;
+  font-size: var(--l_font); /* 20px */
+  line-height: 40px;
+  margin-bottom: 25px;
+}
+
+/* 메인 목록 (각 내부) */
+.main_list_wrap {
+  overflow-x: auto;
+  white-space: nowrap;
+  user-select: none; /* 텍스트 선택 방지 (드래그 중) */
+  overflow: hidden; /* 스크롤바 숨기기 */
+}
+
+.main_list {
+  display: inline-block;
+  width: 238px;
+  margin: 0 14px;
+}
+.main_list:first-child {
+  margin-left: 0;
+}
+
+.main_list_img { /* 이미지 태그 감싸는 부모 */
+  min-width: 238px; /* 이미지 크기 */
+  height: 266px; /* 이미지 크기 */
+  overflow: hidden;
+  margin-bottom: 14px;
+  border-radius: 35px;
+}
+.main_list img { /* 이미지 사이즈 */
+  width: 100%;
+  transition: 0.3s;
+}
+
+.main_list p {
+  margin: 10px 0;
+}
+
+.main_list .main_list_name {
+  font-weight: 700;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 20px;
+}
+.main_list .main_list_price,
+.main_list .main_list_datetime {
+  font-size: var(--s_font); /* 14px */
+}
+.main_list_price span {
+  font-weight: 600;
+}
+.main_list_datetime {
+  color: #454545;
+}
+
+.main_list .main_list_label {
+  background: var(--s_color_bk); /* #333 */
+  color: var(--m_color_wh); /* #fff */
+  font-size: var(--xs_font); /* 13px */
+  padding: 6px 12px;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.main_list img:hover {
+  transform: scale(1.2);
+  filter: contrast(80%);
+}
+
+/* 기타 */
+.rightPage {
+  text-align: center;
+  padding: 4px 0px;
+  position: absolute;
+  left: 50%;
+  top: 7%;
+  transform: translateX(-50%);
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--m_color_wh); /* #fff */
+  padding: 5px 12px;
+  border-radius: 10px;
+}
+.main_list_wrap:hover .rightPage {
+  opacity: 1;
+}

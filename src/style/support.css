@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+/* 고객센터 페이지 */
+.support_section {
+  width: 1200px;
+  margin: 30px auto;
+  display: flex;
+}
+
+.support_none {
+  display: none;
+}
+
+/* 고객센터 내부 내비게이션 */
+.support_section > aside {
+  width: 150px;
+  /* height: 100vh; */
+}
+.support_section h2 {
+  line-height: 25px;
+  margin-bottom: 12px;
+}
+.support_section > aside ul {
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.support_section > aside li {
+  margin: 5px 0;
+  padding: 15px 12px;
+}
+.support_section > aside a {
+  display: block;
+  width: 100%;
+}
+
+.support_section > aside .active {
+  color: var(--m_color_g); /* #156615 */
+  font-weight: bold;
+}
+
+/* 고객센터 페이지 본문 */
+.support_section > .support_page {
+  width: calc(1200px - 150px);
+  margin-left: 24px;
+}
+
+
+/* 반응형 */
+/* tablet, mobile 공통 */
+@media screen and (max-width: 1024px) {
+  /* 고객센터 페이지 */
+  .support_section {
+    display: block;
+    width: 98%;
+    margin: 0 1%;
+  }
+  
+  /* 고객센터 내부 내비게이션 */
+  .support_section > aside {
+    width: 100%;
+    display: flex;
+  }
+  .support_section h2 {
+    margin: 0;
+    margin-right: 15px;
+  }
+  .support_section > aside ul {
+    border: none;
+    display: flex;
+    padding-top: 4px; /* 옆의 h2와 비슷한 위치로 조정 */
+  }
+  .support_section > aside li {
+    margin: 0 15px;
+    padding: 0;
+  }
+  .support_section > aside a {
+    display: inline-block;
+    width: auto;
+  }
+
+  /* 고객센터 페이지 본문 */
+  .support_section {
+    display: block;
+    width: 98%;
+    margin: 0 1%;
+  }
+
+  /* 공지사항 페이지 */
+  .support_section > .support_page {
+    width: 100%;
+    margin: 30px 0;
+  }
+}
+
+/* tablet (max-width: 1024px , min-width: 768px */
+@media screen and (max-width: 1024px) and (min-width: 768px) {}
+
+/* mobile (max-width: 767px) */
+@media screen and (max-width: 767px) {}

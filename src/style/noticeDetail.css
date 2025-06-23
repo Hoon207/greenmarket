@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+.notice_detail {
+  min-height: 70vh; /* 작성한 내용이 거의 없어서 작은 높이로 인해 임시 지정(값 조정 or 삭제해도 무방) */
+}
+
+.notice_detail .notice_hidden_top, .notice_detail .notice_top, .notice_detail .notice_mid, .notice_detail .notice_btm {
+  padding: 10px 5px;
+  box-sizing: border-box;
+}
+
+.notice_detail .notice_hidden_top, .notice_detail .notice_mid {
+  text-align: right;
+}
+.notice_detail .notice_back_btn {
+  /* notice.css와 동일한 버튼 공통 서식 */
+  border: none;
+  margin: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  /* 이하 별도 서식 */
+  padding: 4px 18px;
+  background: #dcdcdc;
+}
+.notice_detail .notice_back_btn:hover {
+  background: #cdcdcd;
+}
+
+.notice_detail .notice_top {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+.notice_detail .notice_title {
+  font-weight: bold;
+  font-size: var(--l_font); /* 20px */
+}
+
+.notice_detail .notice_mid {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.notice_detail .notice_cont {
+  white-space: pre-line; /* 자동 줄바꿈되어 출력 */
+  line-height: 20px;
+}
+
+/* 반응형 */
+/* tablet, mobile 공통 */
+@media screen and (max-width: 1024px) {}
+
+/* tablet (max-width: 1024px , min-width: 768px */
+@media screen and (max-width: 1024px) and (min-width: 768px) {}
+
+/* mobile (max-width: 767px) */
+@media screen and (max-width: 767px) {
+  .notice_detail .notice_top {
+    display: block;
+  }
+  .notice_detail .notice_title {
+    margin-bottom: 15px;
+  }
+  .notice_detail .notice_dateday {
+    text-align: right;
+  }
+}

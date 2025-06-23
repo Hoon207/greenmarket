@@ -1,0 +1,340 @@
+@charset "utf-8";
+
+.goods-insert-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  }
+
+.goods-insert-container h2 {
+  text-align: center;
+  font-size: 24px;
+  margin: 40px;
+  font-weight: bold;
+}
+
+.goods-insert-form {
+  display: flex;
+  flex-direction: column;
+  line-height: 40px;
+  gap: 25px;
+  margin-top: 50px;
+}
+
+.goods-insert-form p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.goods-insert-form label {
+  min-width: 85px;
+  font-weight: bold;
+}
+
+.goods-insert-form input[type="text"],
+.goods-insert-form input[type="number"],
+.goods-insert-form input[type="price"],
+.goods-insert-form input[type="file"],
+.goods-insert-form select,
+.goods-insert-form textarea {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;   
+  background-color: white;
+}
+
+input[type="file"] {
+  display: block;
+  width: 900px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.goods-insert-form textarea {
+  resize: vertical;
+}
+
+/* 사진 영역 */
+.photo-section {
+  width: 710px; 
+  margin: 0 auto; 
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  margin-bottom: 30px;
+
+}
+
+/* 대표 사진 영역 */
+.main-photo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* 세로 중앙 정렬 */
+  align-items: center;      /* 가로 중앙 정렬 */
+  border: 1px solid #ccc;   /* 테두리 */
+  width: 280px;             /* 이미지 크기 맞춤 */
+  height: 280px;            /* 정사각형 영역 확보 */
+  cursor: pointer;
+}
+
+
+.main-photo img {
+  display: block;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  width: 280px;        
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+
+
+/* 썸네일 영역 */
+.thumbnails {
+  width: 300px;  
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  justify-items: center; 
+  margin-top:30px ;
+}
+
+
+.thumbnail-preview {
+  border: none;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  display: inline-block; 
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  width:auto;
+}
+
+.submit-btn, .cancel-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.submit-btn {
+  width: 170px;
+  background-color: #156615;
+  color: white;
+  border: none;
+  border-radius: 15px;
+}
+
+.cancel-btn {
+  width: 170px;
+  background-color:#fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+.thumbnail-wrapper {
+  width: 100px;
+  height: 100px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.thumb-nav {
+  display: none;
+}
+
+
+/* 태블릿 (768px ~ 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .goods-insert-container {
+    padding: 30px 20px;
+  }
+
+  .goods-insert-container h2 {
+    font-size: 22px;
+    margin: 30px;
+  }
+
+  .goods-insert-form {
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .goods-insert-form label {
+    min-width: 100px;
+  }
+
+  input[type="file"] {
+    width: 100%;
+    height: 80px;
+  }
+
+  .photo-section {
+    flex-direction: row; /* 기존에 column으로 돼있으면 row로 변경 */
+    align-items: flex-start; /* PC랑 같게 */
+    gap: 50px; /* PC랑 동일 간격 */
+  }
+
+  .main-photo {
+    width: 280px;           
+    height: 280px;     
+    cursor: pointer;
+  }
+
+  .main-photo img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+  }
+
+  .thumbnails {
+    width: 300px; /* PC랑 동일하게 */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3열 */
+    grid-template-rows: repeat(2, 1fr); /* 2행 */
+    gap: 25px; /* 간격 동일 */
+    justify-items: center; 
+    margin-top: 30px;
+  }
+
+  .thumbnail-preview {
+    width: 100px;
+    height: 100px;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    width: 170px;
+  }
+}
+
+
+/* 모바일 (최대 767px) */
+@media screen and (max-width: 767px) {
+  .goods-insert-container {
+    padding: 20px 15px;
+  }
+
+  .goods-insert-container h2 {
+    font-size: 20px;
+    margin: 20px;
+  }
+
+  .goods-insert-form {
+    gap: 15px;
+    margin-top: 30px;
+  }
+
+  .goods-insert-form p {
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.4;
+  }
+
+  .goods-insert-form label {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .goods-insert-form input[type="text"],
+  .goods-insert-form input[type="number"],
+  .goods-insert-form input[type="price"],
+  .goods-insert-form input[type="file"],
+  .goods-insert-form select,
+  .goods-insert-form textarea {
+    width: 100%;
+  }
+
+  input[type="file"] {
+    height: 70px;
+  }
+
+  .photo-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .main-photo {
+    background-color: #fff;
+    min-width: 280px;
+    min-height: 280px;
+    position: relative;
+  }
+
+  .main-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumbnails-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 화살표 버튼 보이기 */
+  .thumb-nav {
+    display: block;
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    padding: 40px;
+    margin-top: 25px;
+  }
+  
+
+ 
+  .thumbnails {
+    display: flex;
+    width: calc(80px * 3 + 10px * 2); 
+    overflow: hidden;
+    gap: 10px;
+  }
+
+  /* 썸네일을 가로로 나란히 정렬 */
+  .thumbnail-wrapper {
+    flex: 0 0 80px; 
+  }
+  .thumbnail-wrapper,
+.thumbnail-wrapper img {
+  box-sizing: border-box;
+}
+.button-group {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.submit-btn,
+.cancel-btn {
+  flex: 1; 
+  width: 250px; 
+  margin: 0 auto;
+  border-radius: 8px; 
+}
+
+}
+
+

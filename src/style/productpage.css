@@ -1,0 +1,188 @@
+@charset "uft-8";
+
+
+/* ── 래퍼 ────────────────────────────────────── */
+.productpage_wrap {
+  width: 1186px;
+  margin: 60px auto 60px auto;
+  font-size: 16px;
+}
+
+/* ── 큰 탭 ───────────────────────────────────── */
+.productpage_tab-list {
+  display: flex;
+  margin: 60px auto 20px auto;
+  justify-content: space-evenly;
+}
+
+.productpage_tab-item {
+  flex: 1 1 0;
+  max-width: 260px;
+  height: 56px;
+  border: 2px solid var(--m_color_g);
+  border-radius: 24px;
+  background: var(--m_color_wh);
+  color: var(--m_color_g);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.25s, color 0.25s;
+}
+
+.productpage_tab-item.active {
+  background: var(--m_color_g);
+  color: var(--m_color_wh);
+}
+
+/* 뱃지(선택 개수) */
+.productpage_tab-item em {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--m_color_g);
+  color: var(--m_color_wh);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 공통 패널 ───────────────────────────────── */
+.productpage_panel {
+  border: 2px solid var(--s_color_bk);
+  border-radius: 6px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+/* 검색창 */
+.productpage_search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.productpage_search input {
+  flex: 1 1 0;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+/* 5열 그리드(카테고리·브랜드 등) */
+.productpage_grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px 24px;
+}
+
+.productpage_grid li {
+  cursor: pointer;
+}
+
+.productpage_grid li:hover {
+  text-decoration: underline;
+}
+
+/* 가격 입력 박스 */
+.productpage_price input {
+  width: 120px;
+  padding: 8px 10px;
+  margin: 0 8px 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.productpage_price button {
+  padding: 10px 18px;
+  background: #bbb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ── 필터 바 ─────────────────────────────────── */
+.productpage_filter-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.productpage_filter-bar button {
+  background: #eee;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.productpage_filter-bar span {
+  background: #e3f5ec;
+  color: var(--m_color_g);
+  border-radius: 30px;
+  padding: 6px 12px;
+}
+
+.productpage_filter-bar span b {
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+/* ── ★추가 : 실제 상품 카드 5열 그리드 ───────────────────────── */
+.productpage_items_list{
+  display:grid;
+  grid-template-columns:repeat(5,1fr); /* 5열 */
+  gap:26px 18px;
+  margin-top:40px;
+}
+
+/* ▼ 기타(컨디션/판매상태) 패널 전용 ----------------------------- */
+.productpage_panel--etc {
+  border-radius: 5px;        /* 스크린샷처럼 둥근 모서리 */
+}
+
+/* .etc_group { margin-bottom: 18px; } */
+.etc_title {
+  display: inline-block;
+  width: 120px;
+  font-weight: 600;
+}
+.etc_list {
+  display: inline-flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.etc_list li {
+  cursor: pointer;
+  color: var(--s_color_bk);
+}
+.etc_list li.on {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* 구분선 */
+.productpage_panel--etc hr {
+  margin: 18px 0;
+  border: none;
+  border-top: 1px solid #cfcfcf;
+}
+
+/* ── 가격 패널의 적용 버튼 활성화 스타일 ── */
+.productpage_price button.active {
+  background: var(--m_color_g);
+  color: var(--m_color_wh);
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "img": "/images/item_lug.jpg",
+    "brand": "브랜드A",
+    "category": "러그",
+    "name": "러그",
+    "price": 12000,
+    "time": "방금 전"
+  },
+  {
+    "id": 2,
+    "img": "/images/item1.jpg",
+    "brand": "브랜드A",
+    "category": "제품명1",
+    "name": "제품명1",
+    "price": 23000,
+    "time": "1시간 전"
+  },
+  {
+    "id": 3,
+    "img": "/images/item2.jpg",
+    "brand": "브랜드A",
+    "category": "제품명2",
+    "name": "제품명2",
+    "price": 18000,
+    "time": "2시간 전"
+  },
+  {
+    "id": 4,
+    "img": "/images/item3.jpg",
+    "brand": "브랜드B",
+    "category": "제품명3",
+    "name": "제품명3",
+    "price": 46000,
+    "time": "어제"
+  },
+  {
+    "id": 5,
+    "img": "/images/item4.jpg",
+    "brand": "브랜드B",
+    "category": "제품명4",
+    "name": "제품명4",
+    "price": 9900,
+    "time": "1일 전"
+  },
+  {
+    "id": 6,
+    "img": "/images/item5.jpg",
+    "brand": "브랜드C",
+    "category": "제품명5",
+    "name": "제품명5",
+    "price": 35000,
+    "time": "2일 전"
+  },
+  {
+    "id": 7,
+    "img": "/images/item6.jpg",
+    "brand": "브랜드C",
+    "category": "제품명6",
+    "name": "제품명6",
+    "price": 5000,
+    "time": "3일 전"
+  }
+]
