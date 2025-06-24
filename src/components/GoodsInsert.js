@@ -8,6 +8,18 @@ import axios from 'axios';
 
 function GoodsInsert() {
   const navigate = useNavigate();
+
+  // 로그인 체크: 토큰이 없으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요한 서비스입니다.');
+      navigate('/login');
+    }
+  }, [navigate]);
+
+
+  //폼 상태 관리
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -238,8 +250,8 @@ function GoodsInsert() {
                       onClick={() => onThumbnailClick(actual)} style={{
                         cursor: 'pointer',
                         position: 'relative',
-                        width: '100px',
-                        height: '100px',
+                        width: '80px',
+                        height: '80px',
                         backgroundColor: '#f0f0f0',
                         borderRadius: '8px',
                         overflow: 'hidden',
@@ -314,9 +326,9 @@ function GoodsInsert() {
           >
             <option value="">상태 선택</option>
             <option value="새상품(미개봉)">새상품(미개봉)</option>
-            <option value="거의 새상품">거의 새상품</option>
-            <option value="사용감 있는 깨끗한 상품">사용감 있는 깨끗한 상품</option>
-            <option value="사용 흔적이 많이 있는 상품">사용 흔적이 많이 있는 상품</option>
+            <option value="거의 새상품(상)">거의 새상품(상)</option>
+            <option value="사용감 있는 깨끗한 상품(중)">사용감 있는 깨끗한 상품(중)</option>
+            <option value="사용 흔적이 많이 있는 상품(하)">사용 흔적이 많이 있는 상품(하)</option>
           </select>
         </p>
 

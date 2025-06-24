@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,11 +17,13 @@ function Register(props) {
     region: '', // 지역(테이블) & 지역-도/특별시/광역시
     city: '', // 지역-시/군/구(이후 region 테이블에 합)
     town: '', // 지역-읍/면/동(이후 region 테이블에 합)
+    locate: '' // 지역의 기타(이후 region 테이블에 합)
   }); // 입력값 저장 변수
   const [error, setError] = useState(''); // 에러 발생시 변수
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false); // 이용약관 펼치고접기
+  const [text, setText] = useState(); // 이용약관 불러오기 변수
 
   // 입력시 실행함수
   const handleChange = (e) => {
@@ -30,8 +32,8 @@ function Register(props) {
   }
 
   // Region.js에서 받아온 값 실행
-  const handleRegionChange = useCallback(({region, city, town}) => {
-    setForm(prev => ({...prev, region, city, town}));
+  const handleRegionChange = useCallback(({region, city, town, locate}) => {
+    setForm(prev => ({...prev, region, city, town, locate}));
   }, []);
 
   // 회원가입 버튼 클릭시 실행함수
@@ -55,15 +57,19 @@ function Register(props) {
       }
 
       // 전송
+      //로컬 테스트용 
+      //await axios.post('http://localhost:9070/register', {
+
+      //cloudtype 연결용
+      //await axios.post('http://localhost:9070/api/register', {
+      
       await axios.post('http://localhost:9070/register', {
         username: form.username,
         userid: form.userid,
         password: form.password,
         phone: form.phone,
         email: form.email,
-        city: form.city,
-        town: form.town,
-        region: finalRegion        // 상단에서 조합된 문자열
+        region: finalRegion // 상단에서 조합된 문자열
       });
 
       setForm({
@@ -75,7 +81,8 @@ function Register(props) {
         email: '',
         region: '',
         city: '',
-        town: ''
+        town: '',
+        locate: ''
       });
 
       alert('회원가입 성공');
@@ -93,6 +100,11 @@ function Register(props) {
   }
 
   // 이용약관 불러오기
+  useEffect(() => {
+    fetch('/agreetxt.txt')
+    .then((res) => res.text())
+    .then((data) => setText(data));
+  }, []);
 
   return (
     <section>
@@ -118,7 +130,7 @@ function Register(props) {
           </p>
           <p>
             <label htmlFor='logform_phone'>휴대전화 <span>&#42;</span></label>
-            <input type='tel' id='logform_phone' name='phone' required maxLength='40' placeholder='휴대전화(숫자만 입력)' value={form.phone} onChange={handleChange} />
+            <input type='tel' id='logform_phone' name='phone' required maxLength='11' placeholder='휴대전화(숫자만 입력)' value={form.phone} onChange={handleChange} />
           </p>
           <p>
             <label htmlFor='logform_email'>이메일 <span>&#42;</span></label>
@@ -138,11 +150,12 @@ function Register(props) {
             <span>
               {isOpen ? <FontAwesomeIcon icon={faChevronUp}></FontAwesomeIcon> : <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>}
             </span>
-          
+            {/* 조건 ? (참) 위화살(=펼쳤을때) : (거짓) 아래화살(=접혔을때) */}
           </div>
           <div style={{height: isOpen ? '220px' : '0', overflow: 'hidden', transition: 'height 0.3s ease'}}>
           {isOpen && 
-          <textarea cols='73' rows='10' readOnly id='logform_agreetxt' name='agreetxt' value='이용약관'>
+          <textarea cols='73' rows='10' readOnly id='logform_agreetxt' name='agreetxt' value={            text}>
+            {/* 텍스트 파일 불러오기로 입력 */}
           </textarea>}
           </div>
           
@@ -158,3 +171,6 @@ function Register(props) {
 }
 
 export default Register;
+
+// fetch를 이용하여 텍스트 파일 불러오는 방법 : GPT 도움 참고
+// 이용약관 펼치고접기(Toggle) 사용 : GPT 도움 참고

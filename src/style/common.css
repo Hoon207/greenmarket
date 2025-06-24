@@ -18,6 +18,9 @@
   --l_font: 20px;
   --xl_font: 24px;
 }
+body, html {
+  overflow-x: hidden;
+}
 
 /* 구글 무료 폰트 연결 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Protest+Strike&display=swap');
@@ -34,6 +37,7 @@ a {
   color: var(--s_color_bk);
 }
 
+
 /* ────────── 헤더 PC용 ────────── */
 .header_wrap {
   margin: 0 auto;
@@ -49,18 +53,17 @@ a {
 .header_search_wrap {
   position: absolute;
   left: 50%;
-  top: 70%;
+  top: 50%;
   height: 50%;
   transform: translate(-50%, -50%);
 }
 .header_search_wrap input {
   border-radius: 50px;
   border: 1px solid var(--m_color_g);
-  text-indent: 25px;
-  padding: 10px;
+  text-indent: 35px;
+  padding: 5px;
   width: 400px;
 }
-.header_search_wrap input:focus{outline:none;}
 .header_search-icon {
   position: absolute;
   top: 10px;
@@ -86,11 +89,38 @@ a {
   display: inline-block;
   padding-left: 20px;
 }
+.mobile_menu_icon {
+  font-size: 26px !important;
+  color: #333 !important;
+}
+
+
+
+
+
+/* 각 메뉴 항목 스타일 
+.mobile_menu li {
+  padding: 10px;
+  border: none;
+}*/
+
+/* 링크 텍스트 
+.mobile_menu a {
+  font-size: 1.1rem;
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+}*/
+.mobile_menu_btn {
+  display: none;
+}
 
 /* ────────── 푸터 PC용 ────────── */
 footer {
+  height: 200px;
   background-color: #333;
-  padding: 25px 0;
+  padding: 40px 0;
+  margin-top: 20px;
 }
 .footer_gnb {
   width: 1200px;
@@ -101,9 +131,11 @@ footer {
   margin-bottom: 20px;
 }
 .footer_gnb ul {
+
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  margin-top: 0px;
 }
 .footer_gnb a {
   color: var(--m_color_wh);
@@ -137,6 +169,7 @@ footer {
   line-height: 20px;
 }
 
+.fixed_mobile_footer .footer_btn{display: none;}
 /* ────────── 메인 섹션 ────────── */
 .main_section {
   margin: 100px auto;
@@ -146,7 +179,6 @@ footer {
 }
 
 /* ────────── 아이콘 기본 숨김 / 텍스트 기본 노출 ────────── */
-.header_search-icon,
 .header_login-icon,
 .header_register-icon,
 .header_logout-icon,
@@ -159,115 +191,20 @@ footer {
 .header_register-text,
 .header_logout-text,
 .header_cart-text,
-.header_cs-text {
+.header_cs-text 
+{
   display: inline;
 }
 
+.footer_con_mobile {
+  display: none; /* 모바일용 숨기기 */
+}
+.footer_con {
+  display: flex; /* 또는 기존 스타일 유지 */
+}
 /* ────────── 태블릿 전용 (768px ~ 1024px) ────────── */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   /* wrapper 풀폭+패딩 */
-  .header_wrap,
-  .footer_wrap {
-    width: 100%;
-    max-width: 100%;
-    padding: 0 20px;
-    box-sizing: border-box;
-  }
-
-  /* 헤더 flex 재배치 */
-  .header_wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 7rem; 
-  }
-  .header_logo img {
-    width: 120px;
-    height: 43px;
-    margin-top: 0;
-  }
-  .header_search_wrap {
-    position: static;
-    transform: none;
-    flex: 1;
-    margin: 0 16px;
-  }
-  .header_search_wrap input {
-    width: 100%;
-    max-width: 300px;
-  }
-  .header_search-icon {
-    display: inline-block;
-    vertical-align: middle;
-    position: absolute;
-    transform: none;
-    left: 11rem;
-    top: 2.4rem
-  }
-
-  /* LNB, GNB 한 줄 flex */
-  /* LNB(nav 로그인/장바구니/로그아웃/CS) - 위에 */
-  .header_lnb_wrap {
-    order: 3;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin: -20px 0;
-  }
-  .header_lnb_wrap ul {
-    display: flex;
-    padding: 0;
-  }
-  .header_lnb_wrap li {
-    padding: 0 12px;
-    font-size: var(--s_font);
-  }
-
-  /* GNB(nav 메뉴) - 아래에 */
-  .header_gnb_wrap {
-    order: 4;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin: -10px 0 8px;
-  }
-  .header_gnb_wrap ul {
-    display: flex;
-    padding: 0;
-  }
-  .header_gnb_wrap li {
-    padding: 0 12px;
-    font-size: var(--s_font);
-  }
-
-
-  /* 아이콘 보이기 / 텍스트 숨김 */
-  .header_login-icon,
-  .header_register-icon,
-  .header_logout-icon,
-  .header_cart-icon,
-  .header_cs-icon,
-  .header_menu-icon {
-    display: inline-block;
-    margin-right: 6px;
-    vertical-align: middle;
-  }
-  .header_login-text,
-  .header_register-text,
-  .header_logout-text,
-  .header_cart-text,
-  .header_cs-text {
-    display: none;
-  }
-
-
-}
-
-
-/* 모바일 전용 */
-@media screen and (max-width: 767px){
-
-    /* wrapper 풀폭+패딩 */
   .header_wrap,
   .footer_wrap {
     width: 100%;
@@ -293,19 +230,20 @@ footer {
     transform: none;
     flex: 1;
     margin: 0 16px;
-    display: none;
   }
   .header_search_wrap input {
     width: 100%;
     max-width: 300px;
+    margin-left:5rem
   }
+
   .header_search-icon {
     display: inline-block;
     vertical-align: middle;
     position: absolute;
     transform: none;
-    left: 11rem;
-    top: 2.4rem
+    left: 31vh;
+    top: 40px
   }
 
   /* LNB, GNB 한 줄 flex */
@@ -354,6 +292,7 @@ footer {
     display: inline-block;
     margin-right: 6px;
     vertical-align: middle;
+    font-size: 26px;
   }
   .header_login-text,
   .header_register-text,
@@ -363,4 +302,273 @@ footer {
     display: none;
   }
 
+
 }
+
+
+/* 모바일 전용 */@media screen and (max-width: 767px) {
+
+  /* 헤더 전체 너비와 패딩 */
+  .header_wrap {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 110px;
+    position: fixed;  /* 상단 고정 */
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 100;
+  }
+  main, .main-content {
+    padding-top: 105px !important;
+  }
+
+  /* 로고 크기 및 위치 */
+  .header_logo {
+    width: 100%;
+    position: relative;
+    left: 20px;
+  }
+  .header_logo img {
+    width: 120px;
+    height: 43px;
+    margin-top: 0;
+    margin-right: 340px;
+  }
+
+  /* 검색창 숨김 */
+  .header_search_wrap input {
+    display: none;
+  }
+  
+  /* 검색 아이콘 위치 조정 */
+  .header_search-icon {
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    left: 19vh;
+    top: 15px;
+    color: #333;
+    font-size: 26px;
+  }
+
+  /* LNB (로그인, 장바구니 등) */
+  .header_lnb_wrap {
+    width: auto;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    position: relative;
+    top: 2px;
+  }
+  .header_lnb_wrap ul {
+    padding: 0;
+    display: none;
+
+  }
+  .header_lnb_wrap li {
+    padding: 0 12px;
+    font-size: var(--s_font);
+  }
+
+  /* GNB 메뉴 숨김 */
+  .header_gnb_wrap {
+    display: none;
+  }
+
+  /* 아이콘만 보이게 하고 텍스트 숨기기 */
+  .header_login-icon,
+  .header_register-icon,
+  .header_logout-icon,
+  .header_cart-icon,
+  .header_cs-icon,
+  .header_menu-icon {
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: middle;
+    font-size: 26px;
+  }
+  .header_login-text,
+  .header_register-text,
+  .header_logout-text,
+  .header_cart-text,
+  .header_cs-text {
+    display: none;
+  }
+  
+  /* 회원가입 숨김 */
+  .lnb-item.signup {
+    display: none !important;
+  }
+
+  /*모바일 버전 봤을때 left값 변경해야함*/
+  .mobile_menu {
+    position: fixed;
+    top: 110px;
+    left: 15px;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  
+  .mobile_menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .mobile_menu li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .mobile_menu a {
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .mobile_menu_btn {
+    position: absolute;
+    top: 31px;
+    right: 10px;
+    display: inline-block;
+    border: none;
+    padding: 10px 10px;
+    background: none;
+    z-index: 1003; /* 메뉴보다 위로 */
+  }
+  
+}
+  
+
+
+
+/*태블릿 푸터*/
+/* ────────── 태블릿 푸터 정리 ────────── */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  footer{
+    width: 100%;
+   }
+   
+   .footer_gnb{
+     width: 100%;
+     margin: 0 auto;
+   }
+   .footer_gnb ul li{
+     font-size: 0.9rem;
+   }
+  
+   .footer_con{
+     display: flex;
+     width: 90%;
+     margin: 0 auto;
+     justify-content: space-between;
+     color: var(--m_color_wh);
+   }
+   .footer_address p{
+     font-size: 0.9rem;
+   }
+   .footer_cs_menu{width: 100%;}
+   .footer_cs_menu li{
+     font-size: 0.9rem;
+   }
+   .footer_address{
+     font-size: var(--xs_font);
+   }
+   .footer_address>p{
+     line-height: 20px;
+     font-size: 0.7rem;
+   }
+ }
+
+
+/* 모바일 전용 푸터 스타일 */
+@media screen and (max-width: 767px) {
+  footer{
+    margin-bottom: 35px;
+    width: 100%;
+   }
+   .footer_gnb{
+     width: 100%;
+     line-height: 35px;
+   }
+ 
+   .footer_gnb ul {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;  /* 줄 바꿈 허용 */
+   }
+   .footer_gnb ul li{
+    width: 33.33%;  
+     font-size: 0.9rem;
+   }
+  
+   .footer_con {
+    display: none; /* 데스크탑용 숨김 */
+  }
+  .footer_con_mobile {
+    display: block; /* 모바일용 보이기 */
+  }
+   .footer_address p{
+     font-size: 0.9rem;
+   }
+   .footer_cs_menu{display: none;}
+  
+   .footer_address{
+     font-size: var(--xs_font);
+   }
+   .footer_address, .footer_cs_tel, .footer_cs{
+     color: #fff;
+     background-color: #333;
+     line-height: 30px;
+     text-align: left;
+     padding: 0px 15px;
+   }
+   
+ /*고정푸터*/ 
+
+
+
+.fixed_mobile_footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color:white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  color: white;
+  border-top: 1px solid #333;
+}
+
+.footer_btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+  font-size: 0.75rem;
+  text-decoration: none;
+  background: none;
+  border: none;
+}
+
+.footer_btn svg {
+  font-size: 1.6rem;
+  margin-bottom: 3px;
+}
+
+
+.fixed_mobile_footer .footer_btn{display: block;}
+}
+

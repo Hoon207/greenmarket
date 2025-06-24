@@ -7,7 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import '../style/ItemDetail.css';
-import {jwtDecode} from 'jwt-decode'; // import 구문 수정
+import {jwtDecode} from 'jwt-decode'; 
 import ItemCard2 from './ItemCard2';
 
 

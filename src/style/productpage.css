@@ -186,3 +186,69 @@
   background: var(--m_color_g);
   color: var(--m_color_wh);
 }
+
+
+/* 태블릿과 모바일에 공통 적용 */
+@media screen and (max-width: 1024px) {
+
+}
+
+/* 태블릿 전용 */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .productpage_wrap {
+  max-width: 800px;
+  margin: 0 0 0 0;
+  font-size: 16px;
+}
+  .productpage_tab-list {
+  max-width: 750px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap:2rem;
+}
+
+.productpage_tab-item {
+  max-width: 260px;
+}
+
+.productpage_panel {
+  max-width: 700px;
+  margin: 0 auto;
+  /* 가로크기 준 상태에서   margin: 0 auto; */
+  
+  /* margin-top: 20px; */
+}
+
+/* 검색창 */
+.productpage_search {
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.productpage_search input {
+  flex: 1 1 0;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.productpage_items_list{
+  max-width: 750px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr); /* 5열 */
+  gap:26px 18px;
+  margin-top:40px;
+}
+
+}
+
+/* 모바일 전용 */
+@media screen and (max-width: 767px) {
+  
+}

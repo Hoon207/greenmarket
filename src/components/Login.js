@@ -24,10 +24,24 @@ function Login(props) {
 
     // 성공시
     try {
+      //로컬 테스트시 필요. 
       const res = await axios.post('http://localhost:9070/login', form);
+      //cloudetype에 올릴 떄는 const res = await axios.post~  위 코드를 주석처리 
+
+      //로컬 테스트용 
+      //axios.post('http://localhost:9070/login', {
+
+      //cloudtype 서버 업로드용
+      //  axios.post('http://localhost:9070/api/login', {
+
+      axios.post('http://localhost:9070/login', {
+        userid: form.userid,
+        password: form.password
+      });
     
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('username', res.data.user.username); 
+      localStorage.setItem('username', res.data.user.username);
+      localStorage.setItem('id', res.data.user.id);
     
       alert('로그인 성공');
       window.location.href = '/'; 

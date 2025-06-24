@@ -24,15 +24,19 @@
   top: 50%;                        /* 슬라이드 세로 중앙 */
   left: 50%;                       /* 슬라이드 가로 중앙 */
   transform: translate(-50%, -50%);
-  color: #fff;                     /* 흰색 텍스트 */
+  color: #00472a;                     /* 흰색 텍스트 */
   text-align: center;
   white-space: pre-line;           /* \n 줄바꿈 처리 */
   font-size: 2rem;
   line-height: 1.4;
-  padding: 0 1rem;                 /* 좌우 여백 */
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  padding: 2rem 3em;                 /* 좌우 여백 */
+  /* text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); */
   pointer-events: none;            /* 캡션 위 클릭은 이미지로 전달 */
   z-index: 5;                      /* 화살표보다 아래, 이미지보다 위 */
+  background-color: rgba(255, 255, 255, 0.671);
+    -webkit-backdrop-filter: blur(10px);               /* iOS Safari, Chrome 지원 */
+  backdrop-filter: blur(10px);                       /* 표준 속성 */
+  border-radius: 5rem;
 }
 
 /* ─── 네비게이션 버튼 ───────────────────────────────────────── */
@@ -64,4 +68,54 @@
 }
 .swiper-pagination-bullet-active {
   background: #000;
+}
+
+
+
+/* 태블릿과 모바일에 공통 적용 */
+@media screen and (max-width: 1024px) {
+
+}
+  
+
+/* 태블릿 전용 */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+  .slide_wrap {
+    /* 부모가 이제 화면 가득이니 100% 만 줘도 꽉 찹니다 */
+    width: 100% !important; 
+    /* 이전 트릭 제거 */
+    position: relative;
+    left: auto;
+    transform: none;
+    padding: 0;
+    max-width: none;
+  }
+
+  .slide_caption {
+  font-size: 1.5rem;
+  padding: 1rem 2em;   
+}
+
+.slide_wrap .swiper-button-prev,
+.slide_wrap .swiper-button-next {
+  width: calc(var(--swiper-navigation-size) / 4 * 30);
+}
+
+}
+
+/* 모바일 전용 */
+@media screen and (max-width: 767px) {
+
+
+  .slide_caption {
+  font-size: 0.9rem;
+  padding: 1rem 2em;                 /* 좌우 여백 */
+}
+
+.slide_wrap .swiper-button-prev,
+.slide_wrap .swiper-button-next {
+  --swiper-navigation-size: 16px;  /* 원하는 크기로 설정 */
+  width: calc(var(--swiper-navigation-size) / 4 * 30);
+}
 }

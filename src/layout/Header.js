@@ -8,15 +8,23 @@ import {
   faUserPlus,
   faHeadset,
   faShoppingCart,
-  faSignOut
+  faBars,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons';
-
 
 function Header() {
   const navigate = useNavigate();
   const [username, setUsername] = useState(null);
-  const [keyword, setKeyword] = useState(''); 
-  const [id, setId] = useState(null); // (회원정보 수정을 위함)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const linkStyle = {
+    display: 'block',
+    padding: '6px 16px',
+    fontSize: '1rem',
+    color: '#333',
+    textDecoration: 'none',
+  };
 
   useEffect(() => {
     const storedName = localStorage.getItem('username');
@@ -24,29 +32,21 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    const storedName = localStorage.getItem('username');
-    const storedId = localStorage.getItem('id'); // 사용자 ID (회원정보 수정을 위함)
-    setUsername(storedName);
-    setId(storedId); // (회원정보 수정을 위함)
-    // 로그인 체크 및 강제 이동은 여기서 하지 마세요!
-  }, []);
-
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      if (window.innerWidth >= 768 && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [menuOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    localStorage.removeItem('id'); // (회원정보 수정을 위함)
-    setUsername(null);
-    setId(null); // (회원정보 수정을 위함)
     setUsername(null);
     navigate('/');
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (keyword.trim() === '') return;
-    navigate(`/search?q=${encodeURIComponent(keyword.trim())}`);
-    setKeyword('');
   };
 
   return (
@@ -54,26 +54,95 @@ function Header() {
       <div className='header_wrap'>
         <div className='header_logo'>
           <Link to="/">
-            <img
-              src={`${process.env.PUBLIC_URL}/images/header_logo.png`}
-              alt="메뉴보기"
-            />
+            <img src={`${process.env.PUBLIC_URL}/images/header_logo.png`} alt="메뉴보기" />
           </Link>
         </div>
 
+        <button
+          className="mobile_menu_btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+        >
+          <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} className="mobile_menu_icon" />
+        </button>
+
         <div className='header_search_wrap'>
-          <form onSubmit={handleSearchSubmit}>
+          <form>
             <FontAwesomeIcon icon={faMagnifyingGlass} className="header_search-icon" />
-            <input
-              type="text"
-              value={keyword}
-              onChange={e => setKeyword(e.target.value)}
-              placeholder="검색어를 입력하세요"
-              aria-label="검색어 입력"
-            />
+            <input />
           </form>
         </div>
 
+        {/* 모바일 메뉴 & 오버레이 */}
+        {menuOpen && windowWidth < 768 && (
+          <>
+            {/* 검은 배경 오버레이 */}
+            <div
+              className="mobile_overlay"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                zIndex: 1000,
+              }}
+            />
+
+            {/* 오른쪽에서 슬라이드로 나오는 메뉴 */}
+            <div
+              className="mobile_menu"
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                width: '250px',
+                height: '100vh',
+                backgroundColor: '#fff',
+                zIndex: 1001,
+                paddingTop: '60px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                transform: menuOpen ? 'translateX(235px)': 'translateX(100%)',
+              }}
+            >
+              <ul style={{ listStyle: 'none', padding: 0, margin: '25px 0', width: '100%', textAlign: 'center' }}>
+                <li><Link to="/productpage" onClick={() => setMenuOpen(false)} style={linkStyle}>중고마켓</Link></li>
+                <li><Link to="/goodsinsert" onClick={() => setMenuOpen(false)} style={linkStyle}>판매등록</Link></li>
+                <li><Link to="/" onClick={() => setMenuOpen(false)} style={linkStyle}>그린커뮤니티</Link></li>
+              </ul>
+
+              <ul style={{ listStyle: 'none', padding: 0, marginTop: '50px', borderTop: '1px solid #eee', width: '100%', textAlign: 'center' }}>
+                {username ? (
+                  <>
+                    <li><span style={{ ...linkStyle, fontWeight: 'bold' }}>{username}님!</span></li>
+                    <li>
+                      <button onClick={handleLogout} style={{ ...linkStyle, background: 'none', border: 'none', width: '100%', cursor: 'pointer' }}>로그아웃</button>
+                    </li>
+                    <li><Link to="/cart" onClick={() => setMenuOpen(false)} style={linkStyle}>장바구니</Link></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link to="/login" onClick={() => setMenuOpen(false)} style={linkStyle}>로그인</Link></li>
+                    <li><Link to="/register" onClick={() => setMenuOpen(false)} style={linkStyle}>회원가입</Link></li>
+                  </>
+                )}
+                <li><Link to="/" onClick={() => setMenuOpen(false)} style={linkStyle}>고객센터</Link></li>
+              </ul>
+
+              <ul style={{ listStyle: 'none', padding: 0, marginTop: '80px', borderTop: '1px solid #eee', width: '100%', textAlign: 'center' }}>
+                <li><Link to="/qna" onClick={() => setMenuOpen(false)} style={linkStyle}>공지사항</Link></li>
+                <li><Link to="/qna" onClick={() => setMenuOpen(false)} style={linkStyle}>1:1 문의하기</Link></li>
+                <li><Link to="/faq" onClick={() => setMenuOpen(false)} style={linkStyle}>자주 묻는 질문</Link></li>
+              </ul>
+            </div>
+          </>
+        )}
+
+        {/* PC 메뉴 */}
         <nav className='header_lnb_wrap'>
           <ul>
             {username ? (
@@ -82,26 +151,11 @@ function Header() {
                 <li>
                   <button
                     onClick={handleLogout}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: '#333',
-                      padding: 0,
-                      fontSize: '1em',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#333' }}
                   >
-                     <FontAwesomeIcon icon={faSignOut} className="header_logout-icon" />
+                    <FontAwesomeIcon icon={faUser} className="header_logout-icon" />
                     <span className="header_logout-text">로그아웃</span>
                   </button>
-                </li>
-                <li>
-                  <Link to={`/member/update/${id}`}>
-                    <FontAwesomeIcon icon={faUser} className="header_userup-icon" />
-                    <span className="header_userup-text">회원수정</span>
-                  </Link>
                 </li>
                 <li>
                   <Link to="/cart">
@@ -127,7 +181,7 @@ function Header() {
               </>
             )}
             <li>
-            <Link to="/notice">
+              <Link to="/">
                 <FontAwesomeIcon icon={faHeadset} className="header_cs-icon" />
                 <span className="header_cs-text">고객센터</span>
               </Link>

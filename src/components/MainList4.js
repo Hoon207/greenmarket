@@ -12,6 +12,7 @@ function MainList(props) {
   const [scrollLeft, setScrollLeft] = useState(0); // 시작 시점 스크롤 위치
   const [dragMoved, setDragMoved] = useState(false); // 드래그 여부 판단
 
+  // PC의 경우(마우스 사용)
   // 마우스 내렸을 때 (범위 내에 위치할 때)
   const handleMouseDown = (e) => {
     setIsDragging(true); // 활성화
@@ -39,12 +40,29 @@ function MainList(props) {
     scrollRef.current.scrollLeft = scrollLeft - walk;
 
     // 일정 거리 이상 마우스를 움직인 경우만 드래그로 판단하여 활성화
-    // if(Math.abs(walk) > 5) setDragMoved(true);
-    if(Math.abs(x - startX) > 10) {
-      setDragMoved(true);
-    } // 세밀 조정
+    if(Math.abs(walk) > 10) setDragMoved(true);
   }
 
+  // 태블릿, 모바일의 경우 (터치 기능)
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - scrollRef.current.offsetLeft); // 현재 터치한 위치 - 시작 위치 = 이동 거리 계산
+    setScrollLeft(scrollRef.current.scrollLeft);
+    setDragMoved(false);
+  }
+
+  const handleTouchMove = (e) => {
+    if(!isDragging) return;
+    const x = e.touches[0].pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+
+    if(Math.abs(walk) > 10) setDragMoved(true);
+  }
+
+  const handleTouchEnd = () => setIsDragging(false); // 터치 종료시 비활성화
+
+  // 마우스, 터치 공통
   const handleClick = (e) => {
     if(dragMoved) {
       e.preventDefault(); // 드래그 중이면 클릭 방지
@@ -61,23 +79,26 @@ function MainList(props) {
         // cursor: isDragging ? 'grabbing' : 'grab'
         cursor: dragMoved ? 'grabbing' : 'grab' //세밀 조정
       }} 
-      onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}>
+      onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}
+      >
         {dummy.map((mlist, index) => (
           <div className='main_list' key={index}>
             <Link to='/' alt='상품 상세보기' onClick={handleClick}>
               <div className='main_list_img'>
                 <img src={`${process.env.PUBLIC_URL}/images/${mlist.image}`} alt='상품 이미지'></img>
               </div>
-              {/* json 데이터에 label값 유무에 따라 출력 변동 (조건부 렌더링 활용) */}
               {mlist.label &&
-              <span className='main_list_label'>{mlist.label}</span>}
+              <span className='main_list_label'>{mlist.label}</span>} {/* json 데이터에 label값 유무에 따라 출력 변동 */}
               <p className='main_list_name'>{mlist.name}</p>
               <p className='main_list_price'><span>{Number(mlist.price).toLocaleString()}</span>원</p>
-              <p className='main_list_datetime'>1시간전</p>
+              <p className='main_list_datetime'>1시간전 {/* DB에 등록한 시간과 시스템 시간 차이 계산값 */}</p>
             </Link>
           </div>
         ))}
-        <p className='rightPage'>좌우로 움직여 보세요</p>
+        <div className='rightPage'>
+          <p>여기를 눌러서 좌우로 밀어보세요~!</p>
+        </div>
       </div>
     </section>
   );
