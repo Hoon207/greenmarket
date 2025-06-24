@@ -17,9 +17,10 @@ function Cart({ token }) {
           return;
         }
 
-        const res = await axios.get('http://localhost:9070/api/cart', {
-          headers: { Authorization: `Bearer ${actualToken}` },
-        });
+        const res = await axios.get(
+          'https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/cart',
+          { headers: { Authorization: `Bearer ${actualToken}` } }
+        );
 
         const cartWithChecked = res.data.map(item => ({ ...item, checked: false }));
         setProductData(cartWithChecked);
@@ -31,10 +32,10 @@ function Cart({ token }) {
     fetchCart();
   }, [token, navigate]);
 
-  const handleCheck = (id) => {
+  const handleCheck = id => {
     setProductData(prev =>
       prev.map(product =>
-        product.id === id ? { ...product, checked: !product.checked } : product
+        product.cart_id === id ? { ...product, checked: !product.checked } : product
       )
     );
   };
@@ -42,14 +43,17 @@ function Cart({ token }) {
   const actualToken = token || localStorage.getItem('token');
 
   const handleDeleteSelected = async () => {
-    const selectedIds = productData.filter(p => p.checked).map(p => p.id);
-    if (selectedIds.length === 0) return;
+    const selectedIds = productData.filter(p => p.checked).map(p => p.cart_id);
+    if (!selectedIds.length) return;
 
     try {
-      await axios.delete('http://localhost:9070/api/cart', {
-        data: { ids: selectedIds },
-        headers: { Authorization: `Bearer ${actualToken}` },
-      });
+      await axios.delete(
+        'https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/cart',
+        {
+          data: { ids: selectedIds },
+          headers: { Authorization: `Bearer ${actualToken}` }
+        }
+      );
       setProductData(prev => prev.filter(p => !p.checked));
     } catch (err) {
       console.error('선택 삭제 실패', err);
@@ -57,35 +61,47 @@ function Cart({ token }) {
   };
 
   const handleDeleteAll = async () => {
-    const allIds = productData.map(p => p.id);
-    if (allIds.length === 0) return;
+    const allIds = productData.map(p => p.cart_id);
+    if (!allIds.length) return;
 
     try {
-      await axios.delete('http://localhost:9070/api/cart', {
-        data: { ids: allIds },
-        headers: { Authorization: `Bearer ${actualToken}` },
-      });
+      await axios.delete(
+        'https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/cart',
+        {
+          data: { ids: allIds },
+          headers: { Authorization: `Bearer ${actualToken}` }
+        }
+      );
       setProductData([]);
     } catch (err) {
       console.error('전체 삭제 실패', err);
     }
   };
 
-  const handleDeleteSingle = async (id) => {
+  const handleDeleteSingle = async cartId => {
     try {
-      await axios.delete('http://localhost:9070/api/cart', {
-        data: { ids: [id] },
-        headers: { Authorization: `Bearer ${actualToken}` },
-      });
-      setProductData(prev => prev.filter(p => p.id !== id));
+      await axios.delete(
+        'https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/cart',
+        {
+          data: { ids: [cartId] },
+          headers: { Authorization: `Bearer ${actualToken}` }
+        }
+      );
+      setProductData(prev => prev.filter(p => p.cart_id !== cartId));
     } catch (err) {
       console.error('단일 삭제 실패', err);
     }
   };
 
   const selectedProducts = productData.filter(p => p.checked);
-  const itemsTotal = selectedProducts.reduce((sum, p) => sum + p.price * (p.quantity || 1), 0);
-  const shippingTotal = selectedProducts.reduce((sum, p) => sum + p.shipping_fee, 0);
+  const itemsTotal = selectedProducts.reduce(
+    (sum, p) => sum + p.price * (p.quantity || 1),
+    0
+  );
+  const shippingTotal = selectedProducts.reduce(
+    (sum, p) => sum + p.shipping_fee,
+    0
+  );
   const totalPrice = itemsTotal + shippingTotal;
 
   return (
@@ -97,7 +113,7 @@ function Cart({ token }) {
         <button onClick={handleDeleteAll}>모두 삭제</button>
       </div>
 
-      <table className="cart_table">
+      <table className='cart_table'>
         <thead>
           <tr>
             <th>선택</th>
@@ -114,24 +130,27 @@ function Cart({ token }) {
         <tbody>
           {productData.length === 0 ? (
             <tr style={{ borderBottom: 'none' }}>
-              <td colSpan="9">장바구니에 담긴 상품이 없습니다.</td>
+              <td colSpan='9'>장바구니에 담긴 상품이 없습니다.</td>
             </tr>
           ) : (
             productData.map(product => (
-              <tr key={product.id}>
+              <tr key={product.cart_id}>
                 <td>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     checked={product.checked}
-                    onChange={() => handleCheck(product.id)}
+                    onChange={() => handleCheck(product.cart_id)}
                   />
                 </td>
                 <td>
                   <img
-                  
-                    src={product.image_main ? `http://localhost:9070/uploads/${product.image_main}` : '/default_image.png'}
+                    src={
+                      product.image_main
+                        ? `https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/uploads/${product.image_main}`
+                        : '/default_image.png'
+                    }
                     alt={product.title}
-                    width="80"
+                    width='80'
                   />
                 </td>
                 <td>{product.title}</td>
@@ -139,11 +158,25 @@ function Cart({ token }) {
                 <td>{product.kind}</td>
                 <td>{product.condition}</td>
                 <td>{product.price.toLocaleString()}원</td>
-                <td>{product.shipping_fee === 0 ? '무료' : `${product.shipping_fee.toLocaleString()}원`}</td>
                 <td>
-                  <button className='cart_btn_buy' onClick={() => alert(`${product.title} 구매하기`)}>구매</button>{' '}
+                  {product.shipping_fee === 0
+                    ? '무료'
+                    : `${product.shipping_fee.toLocaleString()}원`}
+                </td>
+                <td>
+                  <button
+                    className='cart_btn_buy'
+                    onClick={() => alert(`${product.title} 구매하기`)}
+                  >
+                    구매
+                  </button>
                   <br />
-                  <button className='cart_btn_delete' onClick={() => handleDeleteSingle(product.id)}>삭제</button>
+                  <button
+                    className='cart_btn_delete'
+                    onClick={() => handleDeleteSingle(product.cart_id)}
+                  >
+                    삭제
+                  </button>
                 </td>
               </tr>
             ))
@@ -153,8 +186,7 @@ function Cart({ token }) {
 
       {selectedProducts.length > 0 && (
         <div style={{ marginTop: '20px', textAlign: 'right' }}>
-          선택된 상품: <strong>{selectedProducts.length}개</strong> / 합계:{' '}
-          <strong>{totalPrice.toLocaleString()}원</strong>
+          선택된 상품: <strong>{selectedProducts.length}개</strong> / 합계: <strong>{totalPrice.toLocaleString()}원</strong>
         </div>
       )}
     </div>

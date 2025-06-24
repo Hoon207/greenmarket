@@ -1,6 +1,5 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';  // ← Routes, Route 추가
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './style/reset.css';
 import './style/common.css';
@@ -22,42 +21,42 @@ import NoticeDetail from './components/NoticeDetail';
 import MemberUpdate from './components/MemberUpdate';
 import InquiryForm from './components/InquiryForm';
 import Qna from './components/Qna';
-// import OtherPage from './components/OtherPage';  // 필요하다면 추가
 
 function App() {
-  
+  // 로그인 상태 관리: username, id 저장
+  const [user, setUser] = useState({
+    username: localStorage.getItem('username') || null,
+    id: localStorage.getItem('id') || null,
+  });
+
+  // 만약 토큰 만료 등으로 로그아웃 처리가 필요하면 이곳에 구현 가능
+  // (예: useEffect로 토큰 유효성 검사)
+
   return (
     <BrowserRouter>
-      <Header />
+      {/* Header에 user 상태와 setUser 전달 */}
+      <Header user={user} setUser={setUser} />
 
-      {/* 페이지 컨텐츠 영역 */}
+      <Routes>
+        <Route path="/" element={<Main />} />
+        {/* Login에 setUser 전달 */}
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/productpage" element={<ProductPage />} />
+        <Route path="/itemdetail" element={<ItemDetail />} />
+        <Route path="/goodsinsert" element={<GoodsInsert />} />
+        <Route path="/products/:id" element={<ItemDetail />} />
 
-        <Routes>
-          <Route path="/" element={<Main />} />
-          {/* 로그인/회원가입/카트 */}
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path="/cart" element={<Cart />} />
-          {/* 제품 관련 */}
-          <Route path="/productpage" element={<ProductPage />} />
-          <Route path="/itemdetail" element={<ItemDetail />} />
-          <Route path="/goodsinsert" element={<GoodsInsert />} />
-          <Route path="/products/:id" element={<ItemDetail />} />
+        <Route path="/notice" element={<Notice />} />
+        <Route path="/notice/create" element={<NoticeCreate />} />
+        <Route path="/notice/update/:id" element={<NoticeUpdate />} />
+        <Route path="/notice/:id" element={<NoticeDetail />} />
+        <Route path="/inquiry" element={<InquiryForm />} />
+        <Route path="/qna" element={<Qna />} />
 
-          {/* 고객센터 */}
-          <Route path="/notice" element={<Notice />} />
-          <Route path="/notice/create" element={<NoticeCreate />} />
-          <Route path="/notice/update/:id" element={<NoticeUpdate />} />
-          <Route path="/notice/:id" element={<NoticeDetail />} />
-          <Route path="/inquiry" element={<InquiryForm />} />
-          <Route path="/qna" element={<Qna />} />
-
-          {/* 회원정보 수정 */}
-          <Route path="/member/update/:id" element={<MemberUpdate />} />
-
-          {/* <Route path="/other" element={<OtherPage />} /> */}
-        </Routes>
-
+        <Route path="/member/update/:id" element={<MemberUpdate />} />
+      </Routes>
 
       <Footer />
     </BrowserRouter>

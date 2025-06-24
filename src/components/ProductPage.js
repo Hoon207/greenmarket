@@ -1,5 +1,6 @@
 // components/ProductPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+// import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp, faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -7,19 +8,21 @@ import '../style/productpage.css';
 import Slide from './Slide';
 import ItemCard2 from './ItemCard2';
 
+/* ▸ 필터용 상수 (원본 그대로) */
 const CATEGORY = [
   '여성의류', '남성의류', '가방', '신발',
   '패션잡화', '키즈', '라이프', '전자기기', '반려동물','기타',
 ];
 const BRAND = [
   'NoBrand', '나이키', '아디다스', '자라', '유니클로',
-  '폴로 랄프 로렌', '타미힐피거',
-  '리바이스', '삼성', '애플', '다이소'
+  '폴로 랄프 로렌', '타미힐피거', '리바이스', '타미힐피거',
+  '리바이스', '삼성', '애플', '다이소',
 ];
-const CONDITION = ['새상품(미개봉)', '거의 새상품', '사용감 있는 깨끗한 상품', '사용 흔적이 많이 있는 상품'];
+const CONDITION = ['새상품(미개봉)', '거의 새상품(상)', '사용감 있는 깨끗한 상품(중)', '사용 흔적이 많이 있는 상품(하)'];
 const SALESTATE = ['판매중', '판매완료'];
 
 function ProductPage() {
+  /* ── 기존 상태 (필터/검색) ── */
   const [openKey, setOpenKey]       = useState(null);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands]         = useState([]);
@@ -27,75 +30,63 @@ function ProductPage() {
   const [states, setStates]         = useState([]);
   const [priceMin, setPriceMin]     = useState('');
   const [priceMax, setPriceMax]     = useState('');
-  const [keyword, setKeyword]       = useState('');  // 검색어 상태
+  const [searchInput, setSearchInput] = useState('');
+  const [searchTerm, setSearchTerm]   = useState('');
+
+  /* ── 가격 입력 상태 (적용 전) ── */
   const [tempPriceMin, setTempPriceMin] = useState('');
   const [tempPriceMax, setTempPriceMax] = useState('');
-  const [productItems, setProductItems] = useState([]);  // API로 받은 상품 리스트
 
-  // 배열 토글 헬퍼
+  /* ── DB 연동 상태 ── */
+  const [productItems, setProductItems] = useState([]);  // API 로 받은 상품 리스트
+
+  /* ── 배열 토글 헬퍼 ── */
   const toggleArray = (v, setter) =>
     setter(prev => prev.includes(v) ? prev.filter(i => i !== v) : [...prev, v]);
 
-  // 검색창 입력 핸들러
+  /* ── 검색 입력 핸들러 ── */
   const handleSearchChange = e => {
-    setKeyword(e.target.value);
+    const v = e.target.value;
+    setSearchInput(v);
+    if (v.trim() === '') setSearchTerm('');
   };
-
-  // 엔터 입력 시 검색 실행
   const handleSearchKey = e => {
-    if (e.key === 'Enter') {
-      fetchProducts(e.target.value.trim());
-    }
+    if (e.key === 'Enter') setSearchTerm(searchInput.trim());
   };
 
-  // 상품 조회 함수 (keyword 포함, 필터도 가능하게 확장 가능)
-  const fetchProducts = (searchKeyword = '') => {
-    let url = 'http://localhost:9070/products';
-
-    if (searchKeyword) {
-      url += `?keyword=${encodeURIComponent(searchKeyword)}`;
-    }
-
-    axios.get(url)
+  /* ── 컴포넌트 마운트 시 DB 에서 상품 불러오기 ── */
+  useEffect(() => {
+    axios.get('https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/products')
       .then(res => {
-        // 서버에서 받은 데이터 가공
         const items = res.data.map(p => ({
           id:        p.id,
-          image:     p.images && p.images.length > 0 ? p.images[0] : '',
+          image:     p.images[0] ? p.images[0] : '',           // 첫 번째 이미지 파일명
           brand:     p.brand,
           name:      p.title,
           price:     p.price,
-          time:      new Date(p.datetime).toLocaleDateString(),
+          time: new Date(p.datetime).toLocaleString(),   // 등록일시
           category:  p.kind,
           condition: p.condition,
-          state:     '판매중', // 기본값
+          state:     p.status === 'available' ? '판매완료' : '판매중',
         }));
         setProductItems(items);
       })
       .catch(console.error);
-  };
-
-  // 페이지 로드 시 전체 상품 조회
-  useEffect(() => {
-    fetchProducts();
   }, []);
 
-  // 필터 및 가격, 상태, 검색어가 있을 경우 필터링 (클라이언트 사이드 필터)
-  const filtered = productItems.filter(it => {
-    if (categories.length && !categories.includes(it.category)) return false;
-    if (brands.length && !brands.includes(it.brand)) return false;
-    if (conditions.length && !conditions.includes(it.condition)) return false;
-    if (states.length && !states.includes(it.state)) return false;
-    if (priceMin && it.price < Number(priceMin)) return false;
-    if (priceMax && it.price > Number(priceMax)) return false;
-    if (keyword && !(
-      it.name.toLowerCase().includes(keyword.toLowerCase()) ||
-      it.brand.toLowerCase().includes(keyword.toLowerCase()) ||
-      (it.region && it.region.toLowerCase().includes(keyword.toLowerCase()))
-    )) return false;
-
-    return true;
-  });
+  /* ── 필터 & 검색 적용 ── */
+  const filtered = useMemo(() => {
+    return productItems.filter(it => {
+      if (categories.length && !categories.includes(it.category)) return false;
+      if (brands.length && !brands.includes(it.brand)) return false;
+      if (conditions.length && !conditions.includes(it.condition)) return false;
+      if (states.length && !states.includes(it.state)) return false;
+      if (priceMin && it.price < Number(priceMin)) return false;
+      if (priceMax && it.price > Number(priceMax)) return false;
+      if (searchTerm && !it.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+      return true;
+    });
+  }, [productItems, categories, brands, conditions, states, priceMin, priceMax, searchTerm]);
 
   return (
     <>
@@ -103,7 +94,7 @@ function ProductPage() {
 
       <div className="productpage_wrap">
 
-        {/* 상단 탭 */}
+        {/* ─── 상단 4대 탭 ─── */}
         <ul className="productpage_tab-list">
           {['category','brand','price','etc'].map((key, idx) => {
             const titles = ['카테고리','브랜드','가격','기타'];
@@ -126,7 +117,7 @@ function ProductPage() {
           })}
         </ul>
 
-        {/* 카테고리 패널 */}
+        {/* ── 패널: 카테고리 ── */}
         {openKey==='category' && (
           <div className="productpage_panel">
             <ul className="productpage_grid">
@@ -143,7 +134,7 @@ function ProductPage() {
           </div>
         )}
 
-        {/* 브랜드 패널 */}
+        {/* ── 패널: 브랜드 ── */}
         {openKey==='brand' && (
           <div className="productpage_panel">
             <ul className="productpage_grid">
@@ -160,7 +151,7 @@ function ProductPage() {
           </div>
         )}
 
-        {/* 가격 패널 */}
+        {/* ── 패널: 가격 ── */}
         {openKey==='price' && (
           <div className="productpage_panel productpage_price">
             <div className="price-inputs">
@@ -189,7 +180,7 @@ function ProductPage() {
           </div>
         )}
 
-        {/* 기타 패널 */}
+        {/* ── 패널: 기타(컨디션·판매상태) ── */}
         {openKey==='etc' && (
           <div className="productpage_panel productpage_panel--etc">
             <div className="etc_group">
@@ -226,19 +217,13 @@ function ProductPage() {
           </div>
         )}
 
-        {/* 선택된 필터 토큰 및 초기화 */}
-        {(categories.length || brands.length || conditions.length || states.length || priceMin || priceMax) && (
+        {/* ── 선택된 필터 토큰 & 초기화 ── */}
+        {(categories.length||brands.length||conditions.length||states.length||priceMin||priceMax) && (
           <div className="productpage_filter-bar">
             <button onClick={() => {
-              setCategories([]);
-              setBrands([]);
-              setConditions([]);
-              setStates([]);
-              setPriceMin('');
-              setPriceMax('');
-            }}>
-              초기화 ↺
-            </button>
+              setCategories([]); setBrands([]); setConditions([]); setStates([]);
+              setPriceMin(''); setPriceMax('');
+            }}>초기화 ↺</button>
             {[...categories, ...brands, ...conditions, ...states].map(t => (
               <span key={t}>
                 {t} <b onClick={() => {
@@ -249,34 +234,33 @@ function ProductPage() {
                 }}>×</b>
               </span>
             ))}
-            {(priceMin || priceMax) && (
+            {(priceMin||priceMax) && (
               <span>
-                {priceMin || 0}원 ~ {priceMax || '∞'}원
+                {priceMin||0}원 ~ {priceMax||'∞'}원
                 <b onClick={() => { setPriceMin(''); setPriceMax(''); }}>×</b>
               </span>
             )}
           </div>
         )}
 
-        {/* 검색창 */}
-        <div className="productpage_search" style={{ marginTop: 30 }}>
-          <FontAwesomeIcon icon={faSearch} />
+        {/* ── 검색창 ── */}
+        <div className="productpage_search" style={{marginTop:30}}>
+          <FontAwesomeIcon icon={faSearch}/>
           <input
             placeholder="상품명을 입력하고 Enter"
-            value={keyword}
+            value={searchInput}
             onChange={handleSearchChange}
             onKeyDown={handleSearchKey}
-            aria-label="상품 검색"
           />
         </div>
 
-        {/* 상품 리스트 */}
+        {/* ── 상품 리스트 ── */}
         <ul className="productpage_items_list">
           {filtered.map(it => (
             <ItemCard2
               key={it.id}
               id={it.id}
-              imgSrc={`http://localhost:9070/uploads/${it.image}`}
+              imgSrc={`https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/uploads/${it.image}`}
               brand={it.brand}
               name={it.name}
               price={`${it.price.toLocaleString()}원`}

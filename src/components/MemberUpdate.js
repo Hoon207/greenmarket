@@ -2,142 +2,199 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Region from './Region'; // 지역 선택 별도 연결
+import Region from './Region'; // 지역 선택 컴포넌트
 import '../style/LogForm.css';
 
 function MemberUpdate() {
-  const { id } = useParams(); // 파라미터값 받음
+  const { id } = useParams();
   const [form, setForm] = useState({
     username: '',
     userid: '',
     password: '',
     phone: '',
     email: '',
-    region: '', // 지역(테이블) & 지역-도/특별시/광역시
-    city: '', // 지역-시/군/구(이후 region 테이블에 합)
-    town: '', // 지역-읍/면/동(이후 region 테이블에 합)
-    locate: '' // 지역의 기타(이후 region 테이블에 합)
+    region: '', // 기본 지역 문자열
+    city: '',   // 수정할 때 선택용
+    town: '',
+    locate: ''
   });
   const navigate = useNavigate();
 
-  // 발송 데이터 통신 성공여부 확인 출력
+  // 1) 컴포넌트 마운트 시 DB에서 회원정보 조회
   useEffect(() => {
     axios
-    .get(`http://localhost:9070/member/${id}`) // 전체 조회된 내용 중 숫자를 get방식으로 하여 해당 내용 조회.
-    .then(res => {
-      const fetched = res.data;
-
-      console.log('서버 응답값 : ', res.data);
-      setForm(prevForm => {
-        const isSame = 
-        prevForm.username === fetched.username &&
-        prevForm.userid === fetched.userid &&
-        prevForm.phone === fetched.phone &&
-        prevForm.email === fetched.email &&
-        prevForm.region === fetched.region &&
-        prevForm.city === fetched.city &&
-        prevForm.town === fetched.town &&
-        prevForm.locate === fetched.locate;
-        
-        if(isSame) return prevForm; // 같으면 유지
-        return {...prevForm, ...fetched}; //다르면 업데이트
-      }); /* setForm 호출시 누락값을 기본값으로 유지하기 위함으로 변경 (GPT참고) */
-    })
-    .catch(err => console.log('조회 오류 : ', err));
+      .get(
+        `https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/member/${id}`
+      )
+      .then(res => {
+        const { username, userid, phone, email, region } = res.data;
+        setForm(prev => ({
+          ...prev,
+          username,
+          userid,
+          phone,
+          email,
+          region,
+          city: '',
+          town: '',
+          locate: ''
+        }));
+      })
+      .catch(err => console.error('회원정보 조회 오류:', err));
   }, [id]);
 
-  // 양식에 입력한 내용 저장
-  const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value});
-  }
+  // 2) 폼 입력 변경
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
-  // Region.js에서 받아온 값 실행
-  const handleRegionChange = ({region, city, town, locate}) => {
-    setForm((prev) => ({...prev, region, city, town, locate}));
-  }
+  // 3) Region.js에서 받은 값
+  const handleRegionChange = ({ region, city, town, locate }) => {
+    setForm(prev => ({ ...prev, region, city, town, locate }));
+  };
 
-  // 수정 메뉴 클릭시 실행
-  const handleSubmit = (e) => {
+  // 4) 수정 제출
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    // 지역 관련
-      let finalRegion = ''; // 선택, 입력한 지역
+    // finalRegion 구성
+    let finalRegion = '';
+    if (form.region === '기타') {
+      finalRegion = form.locate.trim();
+    } else {
+      finalRegion = `${form.region} ${form.city} ${form.town}`.trim();
+    }
 
-      if(form.region === '기타') {
-        finalRegion = form.locate.trim(); // 기타 입력값 사용
-      } else {
-        finalRegion = `${form.region} ${form.city} ${form.town}`.trim(); // 예) 경기도 광주시 oo동, 서울특별시 종로구 oo동, ...
-      }
-
+    // 업데이트용 객체
     const updateData = {
       username: form.username,
       phone: form.phone,
       email: form.email,
       region: finalRegion
-    }
-
-    // 비밀번호 변경하는 경우 입력하면 추가
+    };
     if (form.password) {
       updateData.password = form.password;
     }
 
-    axios
-    .put(`http://localhost:9070/member/update/${id}`, updateData)
-    .then(() => {
+    try {
+      await axios.put(
+        `https://port-0-backend-mbioc25168a38ca1.sel4.cloudtype.app/greenmarket/member/update/${id}`,
+        updateData
+      );
       alert('수정이 완료되었습니다.');
       navigate('/');
-    })
-    .catch(err => console.log('수정 오류 : ', err));
-  }
+    } catch (err) {
+      console.error('수정 오류:', err);
+      alert('수정 중 오류가 발생했습니다.');
+    }
+  };
 
-  const handleClick = (e) => {
-    if(window.confirm('수정을 취소하시겠습니까?')) {
-      alert('취소되었습니다. 메인 페이지로 이동합니다.')
+  // 5) 취소
+  const handleCancel = () => {
+    if (window.confirm('수정을 취소하시겠습니까?')) {
       navigate('/');
     }
-  }
+  };
 
   return (
     <section>
       <form className='logform' onSubmit={handleSubmit}>
         <fieldset>
           <legend>회원정보 수정</legend>
+
+          {/* 성함 */}
           <p>
             <label htmlFor='logform_username'>성함</label>
-            <input type='text' id='logform_username' name='username' required maxLength='10' value={form.username} onChange={handleChange} placeholder='성함 또는 별칭' />
+            <input
+              type='text'
+              id='logform_username'
+              name='username'
+              required
+              maxLength='10'
+              placeholder='성함 또는 별칭'
+              value={form.username}
+              onChange={handleChange}
+            />
           </p>
+
+          {/* 아이디 (수정 불가) */}
           <p>
-            <label htmlFor='logform_userid'>아이디<span>(수정불가)</span></label>
-            <input type='text' id='logform_userid' name='userid' required maxLength='30' value={form.userid} onChange={handleChange} readOnly placeholder='아이디' />
+            <label htmlFor='logform_userid'>아이디 <span>(수정불가)</span></label>
+            <input
+              type='text'
+              id='logform_userid'
+              name='userid'
+              readOnly
+              value={form.userid}
+            />
           </p>
+
+          {/* 비밀번호 */}
           <p>
             <label htmlFor='logform_password'>비밀번호</label>
-            <input type='password' id='logform_password' name='password' required maxLength='40' value={form.password} onChange={handleChange} placeholder='회원가입시 입력한 비밀번호 또는 변경할 비밀번호' />
+            <input
+              type='password'
+              id='logform_password'
+              name='password'
+              maxLength='40'
+              placeholder='변경할 비밀번호'
+              value={form.password}
+              onChange={handleChange}
+            />
           </p>
+
+          {/* 휴대전화 */}
           <p>
             <label htmlFor='logform_phone'>휴대전화</label>
-            <input type='tel' id='logform_phone' name='phone' required maxLength='11' value={form.phone} onChange={handleChange} placeholder='휴대전화(숫자만 입력' />
+            <input
+              type='tel'
+              id='logform_phone'
+              name='phone'
+              maxLength='11'
+              placeholder='휴대전화(숫자만)'
+              value={form.phone}
+              onChange={handleChange}
+            />
           </p>
+
+          {/* 이메일 */}
           <p>
             <label htmlFor='logform_email'>이메일</label>
-            <input type='email' id='logform_email' name='email' required maxLength='40' value={form.email} onChange={handleChange} placeholder='이메일(예. id@domain.com)' />
+            <input
+              type='email'
+              id='logform_email'
+              name='email'
+              maxLength='40'
+              placeholder='이메일'
+              value={form.email}
+              onChange={handleChange}
+            />
           </p>
 
+          {/* 기존 지역 표시 */}
           <p className='logform_initial_region'>
-            <label htmlFor='logform_init_region'>입력하신 지역 <span>(지역 수정시 화면에 변경되어 나옵니다.)</span></label>
-            <input type="text" value={form.region === '기타' ? form.locate : `${form.region} ${form.city} ${form.town}`} readOnly id='logform_init_region' />
+            <label htmlFor='logform_init_region'>입력하신 지역</label>
+            <input
+              type='text'
+              id='logform_init_region'
+              readOnly
+              value={form.region}
+            />
           </p>
 
+          {/* 지역 수정 */}
           <p>
             <label htmlFor='logform_region'>수정할 지역</label>
             <Region onChange={handleRegionChange} defer={false} />
           </p>
 
+          {/* 수정/취소 버튼 */}
           <p className='logform_update'>
             <input type='submit' value='수정하기' />
           </p>
           <p className='logform_cancel'>
-            <button type='button' value='취소' onClick={handleClick}>취소</button>
+            <button type='button' onClick={handleCancel}>취소</button>
           </p>
         </fieldset>
       </form>

@@ -12,9 +12,8 @@ import {
   faXmark
 } from '@fortawesome/free-solid-svg-icons';
 
-function Header() {
+function Header({ user, setUser }) {  // user, setUser props 추가
   const navigate = useNavigate();
-  const [username, setUsername] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -25,11 +24,6 @@ function Header() {
     color: '#333',
     textDecoration: 'none',
   };
-
-  useEffect(() => {
-    const storedName = localStorage.getItem('username');
-    setUsername(storedName);
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,7 +39,8 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    setUsername(null);
+    localStorage.removeItem('id');
+    setUser({ username: null, id: null }); // 상태 초기화
     navigate('/');
   };
 
@@ -73,10 +68,8 @@ function Header() {
           </form>
         </div>
 
-        {/* 모바일 메뉴 & 오버레이 */}
         {menuOpen && windowWidth < 768 && (
           <>
-            {/* 검은 배경 오버레이 */}
             <div
               className="mobile_overlay"
               onClick={() => setMenuOpen(false)}
@@ -90,8 +83,6 @@ function Header() {
                 zIndex: 1000,
               }}
             />
-
-            {/* 오른쪽에서 슬라이드로 나오는 메뉴 */}
             <div
               className="mobile_menu"
               style={{
@@ -106,7 +97,7 @@ function Header() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                transform: menuOpen ? 'translateX(235px)': 'translateX(100%)',
+                transform: menuOpen ? 'translateX(235px)' : 'translateX(100%)',
               }}
             >
               <ul style={{ listStyle: 'none', padding: 0, margin: '25px 0', width: '100%', textAlign: 'center' }}>
@@ -116,9 +107,9 @@ function Header() {
               </ul>
 
               <ul style={{ listStyle: 'none', padding: 0, marginTop: '50px', borderTop: '1px solid #eee', width: '100%', textAlign: 'center' }}>
-                {username ? (
+                {user.username ? (
                   <>
-                    <li><span style={{ ...linkStyle, fontWeight: 'bold' }}>{username}님!</span></li>
+                    <li><span style={{ ...linkStyle, fontWeight: 'bold' }}>{user.username}님!</span></li>
                     <li>
                       <button onClick={handleLogout} style={{ ...linkStyle, background: 'none', border: 'none', width: '100%', cursor: 'pointer' }}>로그아웃</button>
                     </li>
@@ -142,12 +133,11 @@ function Header() {
           </>
         )}
 
-        {/* PC 메뉴 */}
         <nav className='header_lnb_wrap'>
           <ul>
-            {username ? (
+            {user.username ? (
               <>
-                <li>{username}님!</li>
+                <li>{user.username}님!</li>
                 <li>
                   <button
                     onClick={handleLogout}
